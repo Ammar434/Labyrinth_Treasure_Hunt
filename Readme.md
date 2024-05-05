@@ -14,11 +14,30 @@
 
 </div>
 
-> Developed by Raoul Houssembay Ammar and Srijita Nandi as part of the Master's Program in Object-Oriented Programming C++ at Université Paris-Saclay (2023-2024), Labyrinth Treasure Hunt is a 3D maze exploration game where players navigate a labyrinth to find treasure while avoiding guards, showcasing practical application of C++, OpenGL, and FLTK.
+> Developed by Raoul Ammar Houssembay and Srijita Nandi as part of the Master's Program in Object-Oriented Programming C++ at Université Paris-Saclay (2023-2024), Labyrinth Treasure Hunt is a 3D maze exploration game where players navigate a labyrinth to find treasure while avoiding guards, showcasing practical application of C++, OpenGL, and FLTK.
+
+
+https://github.com/Ammar434/Labyrinth_Treasure_Hunt/assets/50246683/9af0759f-fae9-41b1-99d5-1c8bded90f99
 
 ## Game Overview
 
 The objective of this game is to navigate a complex 2D maze rendered in 3D, controlling a character called the "Hunter" using either the mouse or keyboard. Players must avoid obstacles and enemies, termed "Guards," who protect the labyrinth's treasure. Success involves reaching the treasure while surviving enemy attacks and overcoming environmental challenges.
+
+## Folder Structure
+
+    Labyrinth Treasure Hunt
+    ├── Makefile            # Compilation scripts to build the game
+    ├── bin                 # Contains binary and executable files
+    ├── include             # Header files for the project
+    ├── lib # Libraries and external dependencies
+    ├    ├── OpenGL # OpenGL libraries specific to different platforms
+    ├    ├── fltk # Fast Light Toolkit libraries for the GUI
+    ├    ├── fmod # FMOD sound engine libraries for audio management  
+    ├── modeles # 3D models used for game characters and items
+    ├── sons # Sound files for game effects like background music and sound effects
+    ├── src # Source files containing the game's main logic
+    ├── textures # Image files used for texturing the game environment and elements
+    └── README.md
 
 ### Platforms Used
 
@@ -48,9 +67,29 @@ The game's labyrinth, designed from a textual layout in a `.txt` file, involves 
 
 ## Building and Running
 
+
+### Prerequisites
+
+- **C++ Compiler**: GCC or Clang, capable of supporting C++17 standards.
+- **Make**: A build automation tool required to automate the compilation process.
+
 ### Clone the Project
+
+Clone the repository to get the source code on your local machine:
 
 ```shell
 git clone https://github.com/yourusername/labyrinth-treasure-hunt.git
+cd labyrinth-treasure-hunt
 ```
+
+### Build the Project
+```shell
+make
+```
+### Run the Game
+```shell
+./bin/labh -l labyrinthe.txt -f -a
+```
+
+
 
