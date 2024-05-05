@@ -5,7 +5,7 @@
  *	Traduit un fichier de type d�finition de labyrinthe au format interne.
  */
 
-#define EMPTY 0 // case vide (ou on peut marcher!)
+#define EMPTY_CELL ' ' // case vide (ou on peut marcher!)
 
 // affiche un message en haut � gauche de l'�cran.
 extern void message(const char *format, ...);
@@ -56,7 +56,7 @@ public:
 	Box *_marks;  // les marques au sol.
 	int _nmarks;  // leur nombre.
 
-	Box _treasor;	 // le tr�sor.
+	Box _treasor;	 // le tresor.
 	Mover **_guards; // les gardes (tableau de pointeurs de gardiens).
 	int _nguards;	 // leur nombre.
 

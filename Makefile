@@ -1,16 +1,22 @@
 RM = rm -f
 EXE =
 OPT = -O3
+
+FOLDEROPENGL = lib/OpenGL
+BUILDDIR = bin
+FLTKDIR = lib/fltk
+INCLUDEDIR = include
+SRCDIR = src
 #
 #	Compilation on Windows for Windows
 #
 ifeq '$(OS)' "Windows_NT"
-FLTK_VERSION = fltk-1.4-windows
+FLTK_VERSION =${FLTKDIR}/fltk-1.4-windows
 EXE = .exe
 LD = ld
 RM = del
-CXX = g++
-CXXFLAGS =		-Wall $(OPT)
+CXX = g++ -std=c++11 
+CXXFLAGS =  -Wall (OPT)
 
 CONSOLE =		-Wl,--subsystem,console
 LINKFLTK_IMG =	$(CONSOLE) -mwindows -L$(FLTK_VERSION) \
@@ -24,15 +30,15 @@ else
 #
 ifeq '$(shell uname -s)' "Darwin"
 ifeq '$(shell uname -p)' "arm"
-FLTK_VERSION = fltk-1.4-macosx-arm
+FLTK_VERSION =${FLTKDIR}/fltk-1.4-macosx-arm
 else
-FLTK_VERSION = fltk-1.4-macosx
+FLTK_VERSION =${FLTKDIR}/fltk-1.4-macosx
 endif
 
 OS = Darwin
-CXX = g++
+CXX = g++ -std=c++11
 LD = ld
-CXXFLAGS =		-Wall -Wno-invalid-source-encoding -Wno-deprecated-declarations \
+CXXFLAGS =		-Wall  -Wno-invalid-source-encoding -Wno-deprecated-declarations \
 				-I /usr/include/freetype2 -I /usr/X11/include $(OPT)
 
 LINKFLTK_IMG =	-L$(FLTK_VERSION) -lfltk_png -lfltk_z -lfltk_jpeg -lfltk_gl \
@@ -43,8 +49,8 @@ ifeq '$(OS)' "Ubuntu"
 #
 #	Compilation on Linux for Linux (Ubuntu)
 #
-FLTK_VERSION = fltk-1.4-ubuntu
-CXX = g++
+FLTK_VERSION =${FLTKDIR}/fltk-1.4-ubuntu
+CXX = g++ -std=c++11
 LD = ld
 CXXFLAGS =		-Wall -DUBUNTU -I /usr/include/freetype2 -I /usr/X11/include $(OPT)
 
@@ -55,9 +61,9 @@ else
 #
 #	Compilation on Linux for Linux (Fedora et autres)
 #
-FLTK_VERSION = fltk-1.4-linux
-FMOD = fmod/4.3
-CXX = g++
+FLTK_VERSION =${FLTKDIR}/fltk-1.4-linux
+FMOD = lib/fmod/4.3
+CXX = g++ -std=c++11
 LD = ld
 CXXFLAGS =		-Wall -I $(FMOD) -I /usr/include/freetype2 -I /usr/X11/include $(OPT)
 
@@ -68,20 +74,23 @@ endif
 endif
 endif
 
+
 .SUFFIXES: .h .o .cc $(EXE)
 
-.cc.o:
+$(BUILDDIR)/%.o: ${SRCDIR}/%.cc
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 #
 #	D�but du Makefile propre au projet
 #
 
-SRC	=	Labyrinthe.cc Chasseur.cc
-H	=	Labyrinthe.h Chasseur.h FireBall.h Sound.h Environnement.h \
-		Gardien.h Mover.h
-O	=	Labyrinthe.o Chasseur.o
-FOLDEROPENGL = OpenGL
+
+SRC = $(wildcard $(SRCDIR)/*.cc)
+H = $(wildcard $(INCLUDEDIR)/*.h)
+
+O	= 	$(BUILDDIR)/Labyrinthe.o $(BUILDDIR)/Chasseur.o $(BUILDDIR)/Gardien.o \
+		${BUILDDIR}/Parser.o ${BUILDDIR}/LabyrintheFiller.o ${BUILDDIR}/Helper.o
+
 ifeq '$(OS)' "Darwin"
 ifeq '$(shell uname -p)' "arm"
 OPENGL_O = OpenGL-macosx-arm.o
@@ -102,13 +111,16 @@ endif
 
 labh$(EXE):	$(O)
 ifeq '$(OS)' "Darwin"
-	$(CXX) -o $@ $(O) $(FOLDEROPENGL)/$(OPENGL_O) $(LINKFLTK_IMG)
+	$(CXX) -o $(BUILDDIR)/$@ $(O) $(FOLDEROPENGL)/$(OPENGL_O) $(LINKFLTK_IMG)
 else
-	$(CXX) -no-pie -o $@ $(O) $(FOLDEROPENGL)/$(OPENGL_O) $(LINKFLTK_IMG)
+	$(CXX) -no-pie -o $(BUILDDIR)/$@ $(O) $(FOLDEROPENGL)/$(OPENGL_O) $(LINKFLTK_IMG)
 endif
 
 clean:
-	$(RM) labh labh.exe $(O)
+	$(RM) ${BUILDDIR}/labh ${BUILDDIR}/labh.exe $(O)
 
-Labyrinthe.o:	Labyrinthe.h Environnement.h Chasseur.h Mover.h Gardien.h
-Chasseur.o:		Chasseur.cc Chasseur.h Mover.h Sound.h
+Labyrinthe.o:	Labyrinthe.h Environnement.h Chasseur.h Mover.h Gardien.h 
+Chasseur.o:		Chasseur.cc Chasseur.h Mover.h Sound.h 
+Gardien.o:		Gardien.cc Gardien.h Mover.h Sound.h 
+
+
